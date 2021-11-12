@@ -30,12 +30,12 @@ public class UserRestController {
     @PostMapping("/user")
     public User createUser(@RequestBody User user){
 
-        String regexEmail = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-        Pattern pattern = Pattern.compile(regexEmail);
+        String regexEmail = "^[\\w-]+(\\.[\\w-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";  
+        Pattern pattern = Pattern.compile(regexEmail, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(user.getEmail());
 
-        //if(!matcher.matches())
-        //    throw new BadRequestException("Correo electronico no cumple con el formato");
+        if(!matcher.matches())
+            throw new BadRequestException("Correo electronico no cumple con el formato");
 
         if(user.getName()==null || user.getName().isEmpty()){
             throw new BadRequestException("Debe proporcionar un nombre");
