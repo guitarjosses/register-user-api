@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hibernate.annotations.Type;
 
 import lombok.Data;
@@ -50,6 +52,7 @@ public class User {
     @Column(name = "USER_PASSWORD")
     private String password;
 
+    //@JsonIgnore
     @OneToMany(targetEntity = Phone.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_UUID")
     private List<Phone> phones;
