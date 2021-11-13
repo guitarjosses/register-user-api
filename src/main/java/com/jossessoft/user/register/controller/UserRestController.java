@@ -3,8 +3,10 @@ package com.jossessoft.user.register.controller;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.jossessoft.user.register.business.domain.UserResponse;
 import com.jossessoft.user.register.data.entity.User;
 import com.jossessoft.user.register.data.repository.UserRepository;
+import com.jossessoft.user.register.exception.AlreadyExistsException;
 import com.jossessoft.user.register.exception.BadRequestException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class UserRestController {
     }
 
     @PostMapping("/user")
-    public User createUser(@RequestBody User user){
+    public UserResponse createUser(@RequestBody User user){
 
         String regexEmail = "^[\\w-]+(\\.[\\w-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";  
         Pattern pattern = Pattern.compile(regexEmail, Pattern.CASE_INSENSITIVE);
@@ -37,13 +39,15 @@ public class UserRestController {
         if(!matcher.matches())
             throw new BadRequestException("Correo electronico no cumple con el formato");
 
-        if(user.getName()==null || user.getName().isEmpty()){
-            throw new BadRequestException("Debe proporcionar un nombre");
-            
-        }else{
-            
-            return userRepository.save(user);
-        }
+            User tUser = userRepository.findByEmail(user.getEmail());
+
+            if(tUser != null)
+                throw new AlreadyExistsException("El correo ya registrado");
+
+            UserResponse userResponse = new UserResponse(user.getEmail(), user.getUserUUID().toString(), user.getCreated(), user.getModified(), user.getLastLogin(), user.getToken(), user.isActive());
+            userRepository.save(user);
+            return userResponse;
+        
         
 
     }

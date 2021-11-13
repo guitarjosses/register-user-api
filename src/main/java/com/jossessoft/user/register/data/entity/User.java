@@ -50,7 +50,6 @@ public class User {
     @Column(name = "USER_PASSWORD")
     private String password;
 
-    //@JsonIgnore
     @OneToMany(targetEntity = Phone.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_UUID")
     private List<Phone> phones;
