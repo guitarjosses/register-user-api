@@ -35,8 +35,9 @@ public class User {
     @Column(name = "LAST_LOGIN")
     private Date lastLogin = new Date();
 
+    @Type(type="uuid-char")
     @Column(name = "TOKEN")
-    private String token;
+    private UUID token;
 
     @Column(name = "ISACTIVE")
     private boolean isActive = true;

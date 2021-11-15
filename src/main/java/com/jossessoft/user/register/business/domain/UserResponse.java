@@ -1,6 +1,9 @@
 package com.jossessoft.user.register.business.domain;
 
 import java.util.Date;
+import java.util.UUID;
+
+import org.hibernate.annotations.Type;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +17,8 @@ public class UserResponse {
     private Date created;
     private Date modified;
     private Date last_login;
-    private String token;
+    @Type(type="uuid-char")
+    private UUID token;
     private boolean isactive;
     
 }
